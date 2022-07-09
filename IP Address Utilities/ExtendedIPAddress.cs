@@ -126,11 +126,7 @@ namespace IPScanApp
             if(other == null)
             {
                 return false;
-            }
-            IPAddress test;
-
-
-            var comparison = CompareIPAddresses(this, other);
+            }var comparison = CompareIPAddresses(this, other);
             return comparison == 0;
         }
 
