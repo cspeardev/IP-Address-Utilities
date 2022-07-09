@@ -40,7 +40,7 @@ namespace IPScanApp
 
         public static ExtendedIPAddress operator ++(ExtendedIPAddress a)
         {
-            int tetCount = a.GetAddressBytes().Count();
+            int tetCount = a.GetAddressBytes().Length;
             ExtendedIPAddress incrementedAddress;
 
             BigInteger addressInt = ConvertIPAddressBits(a);
@@ -62,7 +62,7 @@ namespace IPScanApp
 
         private static BigInteger ConvertIPAddressBits(ExtendedIPAddress address)
         {
-            int tetCount = address.GetAddressBytes().Count();
+            int tetCount = address.GetAddressBytes().Length;
             int tetBits = address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork ? 8 : 16;
             int groupBytesSize = tetBits / 8;
 
@@ -105,11 +105,11 @@ namespace IPScanApp
 
         public bool Equals(ExtendedIPAddress? other)
         {
-            if(other == null)
+            if (other is null)
             {
                 return false;
-            }var comparison = CompareIPAddresses(this, other);
-            return comparison == 0;
+            }
+            return CompareIPAddresses(this, other) == 0;
         }
 
         public int CompareTo(ExtendedIPAddress? other)
@@ -128,6 +128,48 @@ namespace IPScanApp
             {
                 return 0;
             }
+        }
+
+        public override bool Equals(object? comparand)
+        {
+            if (ReferenceEquals(this, comparand))
+            {
+                return true;
+            }
+
+            if (comparand is null)
+            {
+                return false;
+            }
+
+            if(comparand.GetType() != typeof(ExtendedIPAddress))
+            {
+                return false;
+            }
+
+            var other = (ExtendedIPAddress)comparand;
+
+            return CompareTo(other) == 0;
+        }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator ==(ExtendedIPAddress left, ExtendedIPAddress right)
+        {
+            if (left is null)
+            {
+                return right is null;
+            }
+
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ExtendedIPAddress left, ExtendedIPAddress right)
+        {
+            return !(left == right);
         }
     }
 }
