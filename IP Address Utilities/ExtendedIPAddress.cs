@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IPScanApp
 {
-    public class ExtendedIPAddress : IPAddress
+    public class ExtendedIPAddress : IPAddress, IEquatable<ExtendedIPAddress>, IComparable<ExtendedIPAddress>
     {
         #region constructors
         public ExtendedIPAddress(byte[] address) : base(address)
@@ -22,8 +17,6 @@ namespace IPScanApp
         {
         }
         #endregion constructors
-
-
 
         public static bool operator >(ExtendedIPAddress a, ExtendedIPAddress b)
         {
@@ -65,7 +58,13 @@ namespace IPScanApp
 
         public static ExtendedIPAddress operator ++(ExtendedIPAddress a)
         {
-            return IncrementIPAddress(a, 1);
+            int tetCount = a.GetAddressBytes().Count();
+            ExtendedIPAddress incrementedAddress;
+
+            BigInteger addressInt = ConvertIPAddressBits(a);
+            addressInt++;
+            incrementedAddress = ConvertBitsToAddress(addressInt, tetCount);
+            return incrementedAddress;
         }
 
         private static ExtendedIPAddress ConvertBitsToAddress(BigInteger bits, int tetCount)
@@ -77,22 +76,6 @@ namespace IPScanApp
                     >> (8 * (tetCount - (i + 1)))) & 0xFF);
             }
             return new ExtendedIPAddress(addressBytes);
-        }
-
-        /// <summary>
-        /// Increments provided IP address to the next address
-        /// </summary>
-        /// <param name="address">IP Address to be incremented</param>
-        /// <returns></returns>
-        private static ExtendedIPAddress IncrementIPAddress(ExtendedIPAddress address, BigInteger incrementAmount)
-        {
-            int tetCount = address.GetAddressBytes().Count();
-            ExtendedIPAddress incrementedAddress;
-
-            BigInteger addressInt = ConvertIPAddressBits(address);
-            addressInt += incrementAmount;
-            incrementedAddress = ConvertBitsToAddress(addressInt, tetCount);
-            return incrementedAddress;
         }
 
         private static BigInteger ConvertIPAddressBits(ExtendedIPAddress address)
@@ -113,7 +96,6 @@ namespace IPScanApp
             return addressBits;
         }
 
-
         private static BigInteger GetGroupBits(byte[] addressBytes, int groupByteSize, int startIndex)
         {
             BigInteger groupBytes = 0;
@@ -126,8 +108,7 @@ namespace IPScanApp
             }
             return groupBytes;
         }
-
-
+        
         private static BigInteger CompareIPAddresses(ExtendedIPAddress firstAddress, ExtendedIPAddress secondAddress)
         {
             BigInteger difference;
@@ -138,6 +119,37 @@ namespace IPScanApp
             difference = firstAddressBits - secondAddressBits;
 
             return difference;
+        }
+
+        public bool Equals(ExtendedIPAddress? other)
+        {
+            if(other == null)
+            {
+                return false;
+            }
+            IPAddress test;
+
+
+            var comparison = CompareIPAddresses(this, other);
+            return comparison == 0;
+        }
+
+        public int CompareTo(ExtendedIPAddress? other)
+        {
+            ArgumentNullException.ThrowIfNull(other);
+            var comparison = CompareIPAddresses(this, other);
+            if(comparison > 0)
+            {
+                return 1;
+            }
+            else if(comparison < 0)
+            {
+                return -1;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }
