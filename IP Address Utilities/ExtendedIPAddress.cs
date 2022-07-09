@@ -20,41 +20,23 @@ namespace IPScanApp
 
         public static bool operator >(ExtendedIPAddress a, ExtendedIPAddress b)
         {
-            BigInteger difference;
-
-            difference = CompareIPAddresses(a, b);
-
-            return (difference > 0);
+            return a.CompareTo(b) > 0;
         }
 
         public static bool operator >=(ExtendedIPAddress a, ExtendedIPAddress b)
         {
-            BigInteger difference;
-
-            difference = CompareIPAddresses(a, b);
-
-            return (difference >=  0);
+            return (a.CompareTo(b) > 0 || a.CompareTo(b) == 0);
         }
 
         public static bool operator <(ExtendedIPAddress a, ExtendedIPAddress b)
         {
-            BigInteger difference;
-
-            difference = CompareIPAddresses(a, b);
-
-            return (difference < 0);
+            return (a.CompareTo(b) < 0);
         }
-
 
         public static bool operator <=(ExtendedIPAddress a, ExtendedIPAddress b)
         {
-            BigInteger difference;
-
-            difference = CompareIPAddresses(a, b);
-
-            return (difference <= 0);
+            return (a.CompareTo(b) < 0 || a.CompareTo(b) == 0);
         }
-
 
         public static ExtendedIPAddress operator ++(ExtendedIPAddress a)
         {
