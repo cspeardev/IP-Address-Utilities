@@ -3,19 +3,20 @@ using System.Linq;
 using System.Net;
 using System.Numerics;
 
-namespace IPScanApp
+namespace IPAddressUtilities
 {
     public static class IPUtilities
     {
+
         /// <summary>
         /// Increments provided IP address to the next address
         /// </summary>
         /// <param name="address">IP Address to be incremented</param>
         /// <returns></returns>
-        public static IPAddress IncrementIPAddress(IPAddress address, BigInteger incrementAmount)
+        public static ExtendedIPAddress IncrementIPAddress(IPAddress address, BigInteger incrementAmount)
         {
             int tetCount = address.GetAddressBytes().Count();
-            IPAddress incrementedAddress;
+            ExtendedIPAddress incrementedAddress;
 
             BigInteger addressInt = ConvertIPAddressBits(address);
             addressInt += incrementAmount;
@@ -23,7 +24,7 @@ namespace IPScanApp
             return incrementedAddress;
         }
 
-        private static IPAddress ConvertBitsToAddress(BigInteger bits, int tetCount)
+        private static ExtendedIPAddress ConvertBitsToAddress(BigInteger bits, int tetCount)
         {
             byte[] addressBytes = new byte[tetCount];
             for (int i = 0; i < tetCount; i++)
@@ -31,7 +32,7 @@ namespace IPScanApp
                 addressBytes[i] = (byte)((bits
                     >> (8 * (tetCount - (i + 1)))) & 0xFF);
             }
-            return new IPAddress(addressBytes);
+            return new ExtendedIPAddress(addressBytes);
         }
 
         private static BigInteger ConvertIPAddressBits(IPAddress address)
@@ -71,7 +72,7 @@ namespace IPScanApp
         /// <param name="firstAddress">First IP address to be compared</param>
         /// <param name="secondAddress">Second IP address to be compared</param>
         /// <returns></returns>
-        public static BigInteger CompareIPAddresses(IPAddress firstAddress, IPAddress secondAddress)
+        public static BigInteger CompareIPAddresses(ExtendedIPAddress firstAddress, ExtendedIPAddress secondAddress)
         {
             BigInteger difference;
 
@@ -83,12 +84,12 @@ namespace IPScanApp
             return difference;
         }
 
-        public static List<IPAddress> CalculateIPRange(IPAddress start, IPAddress end)
+        public static List<IPAddress> CalculateIPRange(ExtendedIPAddress start, ExtendedIPAddress end)
         {
             List<IPAddress> targetAddresses = new List<IPAddress>();
             BigInteger addressCount;
             addressCount = IPUtilities.CompareIPAddresses(start, end) + 1;
-            IPAddress currentAddress = start;
+            ExtendedIPAddress currentAddress = start;
             for (int i = 0; i < addressCount; i++)
             {
                 targetAddresses.Add(currentAddress);

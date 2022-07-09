@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Numerics;
 
-namespace IPScanApp
+namespace IPAddressUtilities
 {
     public class ExtendedIPAddress : IPAddress, IEquatable<ExtendedIPAddress>, IComparable<ExtendedIPAddress>
     {
@@ -23,6 +23,10 @@ namespace IPScanApp
         }
 
         public ExtendedIPAddress(ReadOnlySpan<byte> address, long scopeid) : base(address, scopeid)
+        {
+        }
+
+        public ExtendedIPAddress(string stringAddress): base(Parse(stringAddress).GetAddressBytes())
         {
         }
         #endregion constructors
@@ -56,6 +60,17 @@ namespace IPScanApp
             addressInt++;
             incrementedAddress = ConvertBitsToAddress(addressInt, tetCount);
             return incrementedAddress;
+        }
+
+        public static ExtendedIPAddress operator --(ExtendedIPAddress a)
+        {
+            int tetCount = a.GetAddressBytes().Length;
+            ExtendedIPAddress decrementedAddress;
+
+            BigInteger addressInt = ConvertIPAddressBits(a);
+            addressInt--;
+            decrementedAddress = ConvertBitsToAddress(addressInt, tetCount);
+            return decrementedAddress;
         }
 
         private static ExtendedIPAddress ConvertBitsToAddress(BigInteger bits, int tetCount)
@@ -180,5 +195,6 @@ namespace IPScanApp
         {
             return !(left == right);
         }
+
     }
 }
