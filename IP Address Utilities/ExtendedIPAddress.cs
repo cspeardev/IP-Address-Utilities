@@ -13,7 +13,16 @@ namespace IPScanApp
         public ExtendedIPAddress(byte[] address, long scopeid) : base(address, scopeid)
         {
         }
+
         public ExtendedIPAddress(long newAddress) : base(newAddress)
+        {
+        }
+
+        public ExtendedIPAddress(ReadOnlySpan<byte> address) : base(address)
+        {
+        }
+
+        public ExtendedIPAddress(ReadOnlySpan<byte> address, long scopeid) : base(address, scopeid)
         {
         }
         #endregion constructors
