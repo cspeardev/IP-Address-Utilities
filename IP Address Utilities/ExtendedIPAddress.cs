@@ -25,7 +25,7 @@ namespace IPScanApp
 
 
 
-        public static Boolean operator >(ExtendedIPAddress a, ExtendedIPAddress b)
+        public static bool operator >(ExtendedIPAddress a, ExtendedIPAddress b)
         {
             BigInteger difference;
 
@@ -34,7 +34,7 @@ namespace IPScanApp
             return (difference > 0);
         }
 
-        public static Boolean operator >=(ExtendedIPAddress a, ExtendedIPAddress b)
+        public static bool operator >=(ExtendedIPAddress a, ExtendedIPAddress b)
         {
             BigInteger difference;
 
@@ -43,7 +43,7 @@ namespace IPScanApp
             return (difference >=  0);
         }
 
-        public static Boolean operator <(ExtendedIPAddress a, ExtendedIPAddress b)
+        public static bool operator <(ExtendedIPAddress a, ExtendedIPAddress b)
         {
             BigInteger difference;
 
@@ -53,7 +53,7 @@ namespace IPScanApp
         }
 
 
-        public static Boolean operator <=(ExtendedIPAddress a, ExtendedIPAddress b)
+        public static bool operator <=(ExtendedIPAddress a, ExtendedIPAddress b)
         {
             BigInteger difference;
 
