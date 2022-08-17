@@ -6,7 +6,7 @@ namespace IPAddressUtilities;
 /// <summary>
 /// Extension of <see cref="IPAddress"/> that adds extra functionality
 /// </summary>
-public class ExtendedIPAddress : IPAddress, IEquatable<ExtendedIPAddress>, IComparable<ExtendedIPAddress>
+public class ExtendedIPAddress : IPAddress, IEquatable<ExtendedIPAddress>, IComparable<ExtendedIPAddress>, ICloneable
 {
     #region constructors
     /// <summary>
@@ -263,6 +263,8 @@ public class ExtendedIPAddress : IPAddress, IEquatable<ExtendedIPAddress>, IComp
         throw new NotImplementedException();
     }
 
-    
-
+    public object Clone()
+    {
+        return new ExtendedIPAddress(GetAddressBytes(), ScopeId);
+    }
 }
