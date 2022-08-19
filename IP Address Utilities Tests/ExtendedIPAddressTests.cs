@@ -3,52 +3,41 @@ using IPAddressUtilities;
 using Xunit;
 using static Xunit.Assert;
 
-//using static Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-
-
 namespace IPAddressUtilitiesTests
 {
-    //[TestClass]
+
     public class ExtendedIPAddressTests
     {
         [Theory]
-        [MemberData(nameof(NotEqualTestData.TestData), MemberType = typeof(NotEqualTestData))]
+        [MemberData(nameof(ExtendedIpAddressTestData.NotEqualTestData), MemberType = typeof(ExtendedIpAddressTestData))]
         public void NotEqualTest(ExtendedIPAddress upper, ExtendedIPAddress lower)
         {
             NotEqual(upper, lower);
+            True(upper != lower);
         }
 
+        [Theory]
+        [MemberData(nameof(ExtendedIpAddressTestData.EqualsTestData), MemberType = typeof(ExtendedIpAddressTestData))]
+        public void EqualTest(ExtendedIPAddress upper, ExtendedIPAddress lower)
+        {
+            Equal(upper, lower);
+            True(upper == lower);
+        }
 
-        //[TestMethod]
-        //public void EqualTest()
-        //{
-        //    ExtendedIPAddress address = new("10.0.0.1");
-        //    ExtendedIPAddress address2 = new("10.0.0.1");
+        [Theory]
+        [MemberData(nameof(ExtendedIpAddressTestData.IncrementTestData), MemberType = typeof(ExtendedIpAddressTestData))]
+        public void IncrementTest(ExtendedIPAddress upper, ExtendedIPAddress lower)
+        {
+            lower++;
+            Equal(upper, lower);
+        }
 
-        //    AreEqual(address, address2);
-        //    IsTrue(address == address2);
-        //}
-
-
-        //[TestMethod]
-        //public void IncrementTest()
-        //{
-        //    ExtendedIPAddress address = new("10.0.0.1");
-        //    address++;
-        //    AreEqual(new("10.0.0.2"), address);
-
-        //    address = new("10.0.0.255");
-        //    address++;
-        //    AreEqual(new("10.0.1.0"), address);
-        //}
-
-        //[TestMethod]
-        //public void DecrementTest()
-        //{
-        //    ExtendedIPAddress address = new("10.0.0.2");
-        //    address--;
-        //    AreEqual(address, new("10.0.0.1"));
-        //}
-
+        [Theory]
+        [MemberData(nameof(ExtendedIpAddressTestData.DecrementTestData), MemberType = typeof(ExtendedIpAddressTestData))]
+        public void DecrementTest(ExtendedIPAddress upper, ExtendedIPAddress lower)
+        {
+            upper--;
+            Equal(upper, lower);
+        }
     }
 }
