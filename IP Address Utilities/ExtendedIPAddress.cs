@@ -36,6 +36,14 @@ public class ExtendedIPAddress : IPAddress, IEquatable<ExtendedIPAddress>, IComp
     public ExtendedIPAddress(string stringAddress): base(Parse(stringAddress).GetAddressBytes())
     {
     }
+
+    public ExtendedIPAddress(IPAddress inAddress) : base(inAddress.GetAddressBytes())
+    {
+        if(inAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+        {
+            ScopeId = inAddress.ScopeId;
+        }
+    }
     #endregion constructors
 
     #region operators
@@ -261,6 +269,12 @@ public class ExtendedIPAddress : IPAddress, IEquatable<ExtendedIPAddress>, IComp
     new public BigInteger GetHashCode()
     {
         throw new NotImplementedException();
+    }
+
+    public static new ExtendedIPAddress Parse(string input)
+    {
+        IPAddress address = IPAddress.Parse(input);
+        return new(address);
     }
 
     public object Clone()
