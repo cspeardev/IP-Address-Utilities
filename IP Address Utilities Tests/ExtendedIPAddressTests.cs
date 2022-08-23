@@ -10,34 +10,72 @@ namespace IPAddressUtilitiesTests
     {
         [Theory]
         [MemberData(nameof(ExtendedIpAddressTestData.NotEqualTestData), MemberType = typeof(ExtendedIpAddressTestData))]
-        public void NotEqualTest(ExtendedIPAddress upper, ExtendedIPAddress lower)
+        public void NotEqualTest(ExtendedIPAddress first, ExtendedIPAddress second)
         {
-            NotEqual(upper, lower);
-            True(upper != lower);
+            NotEqual(first, second);
+            True(first != second);
         }
 
         [Theory]
         [MemberData(nameof(ExtendedIpAddressTestData.EqualsTestData), MemberType = typeof(ExtendedIpAddressTestData))]
-        public void EqualTest(ExtendedIPAddress upper, ExtendedIPAddress lower)
+        public void EqualTest(ExtendedIPAddress first, ExtendedIPAddress second)
         {
-            Equal(upper, lower);
-            True(upper == lower);
+            Equal(first, second);
+            True(first == second);
         }
 
         [Theory]
         [MemberData(nameof(ExtendedIpAddressTestData.IncrementTestData), MemberType = typeof(ExtendedIpAddressTestData))]
-        public void IncrementTest(ExtendedIPAddress upper, ExtendedIPAddress lower)
+        public void IncrementTest(ExtendedIPAddress incremented, ExtendedIPAddress expected)
         {
-            lower++;
-            Equal(upper, lower);
+            incremented++;
+            Equal(incremented, expected);
         }
 
         [Theory]
         [MemberData(nameof(ExtendedIpAddressTestData.DecrementTestData), MemberType = typeof(ExtendedIpAddressTestData))]
-        public void DecrementTest(ExtendedIPAddress upper, ExtendedIPAddress lower)
+        public void DecrementTest(ExtendedIPAddress decremented, ExtendedIPAddress expected)
         {
-            upper--;
-            Equal(upper, lower);
+            decremented--;
+            Equal(decremented, expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(ExtendedIpAddressTestData.GreaterThanTestData), MemberType = typeof(ExtendedIpAddressTestData))]
+        public void GreaterThanTest(ExtendedIPAddress upper, ExtendedIPAddress lower)
+        {
+            True(upper > lower);
+        }
+
+        [Theory]
+        [MemberData(nameof(ExtendedIpAddressTestData.LessThanTestData), MemberType = typeof(ExtendedIpAddressTestData))]
+        public void LessThanTest(ExtendedIPAddress upper, ExtendedIPAddress lower)
+        {
+            True(lower < upper);
+        }
+
+        [Theory]
+        [MemberData(nameof(ExtendedIpAddressTestData.GreaterThanTestData), MemberType = typeof(ExtendedIpAddressTestData))]
+        [MemberData(nameof(ExtendedIpAddressTestData.EqualsTestData), MemberType = typeof(ExtendedIpAddressTestData))]
+        public void GreaterThanOrEqualTest(ExtendedIPAddress upper, ExtendedIPAddress lower)
+        {
+            True(upper >= lower);
+        }
+
+        [Theory]
+        [MemberData(nameof(ExtendedIpAddressTestData.LessThanTestData), MemberType = typeof(ExtendedIpAddressTestData))]
+        [MemberData(nameof(ExtendedIpAddressTestData.EqualsTestData), MemberType = typeof(ExtendedIpAddressTestData))]
+        public void LessThanOrEqualTest(ExtendedIPAddress upper, ExtendedIPAddress lower)
+        {
+            True(lower <= upper);
+        }
+
+        [Theory]
+        [MemberData(nameof(ExtendedIpAddressTestData.ParseTestData), MemberType = typeof(ExtendedIpAddressTestData))]
+        public void ParseTest(string toParse, ExtendedIPAddress expected)
+        {
+            ExtendedIPAddress address = ExtendedIPAddress.Parse(toParse);
+            NotNull(address);
         }
     }
 }
