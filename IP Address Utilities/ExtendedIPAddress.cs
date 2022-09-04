@@ -7,7 +7,7 @@ namespace IPAddressUtilities;
 /// <summary>
 /// Extension of <see cref="IPAddress"/> that adds extra functionality
 /// </summary>
-public class ExtendedIPAddress : IPAddress, IEquatable<ExtendedIPAddress>, IComparable<ExtendedIPAddress>, ICloneable
+public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, ICloneable
 {
     #region constructors
     /// <summary>
@@ -92,6 +92,7 @@ public class ExtendedIPAddress : IPAddress, IEquatable<ExtendedIPAddress>, IComp
     /// <returns></returns>
     public static ExtendedIPAddress operator ++(ExtendedIPAddress a)
     {
+        ArgumentNullException.ThrowIfNull(a);
         int tetCount = a.GetAddressBytes().Length;
         ExtendedIPAddress incrementedAddress;
 
@@ -107,6 +108,7 @@ public class ExtendedIPAddress : IPAddress, IEquatable<ExtendedIPAddress>, IComp
     /// <returns></returns>
     public static ExtendedIPAddress operator --(ExtendedIPAddress a)
     {
+        ArgumentNullException.ThrowIfNull(a);
         int tetCount = a.GetAddressBytes().Length;
         ExtendedIPAddress decrementedAddress;
 
@@ -213,16 +215,6 @@ public class ExtendedIPAddress : IPAddress, IEquatable<ExtendedIPAddress>, IComp
 
         return difference;
     }
-
-    public bool Equals(ExtendedIPAddress? other)
-    {
-        if (other is null)
-        {
-            return false;
-        }
-        return CompareIPAddresses(this, other) == 0;
-    }
-
     public int CompareTo(ExtendedIPAddress? other)
     {
         ArgumentNullException.ThrowIfNull(other);
@@ -241,33 +233,6 @@ public class ExtendedIPAddress : IPAddress, IEquatable<ExtendedIPAddress>, IComp
         }
     }
 
-    public override bool Equals(object? comparand)
-    {
-        if (ReferenceEquals(this, comparand))
-        {
-            return true;
-        }
-
-        if (comparand is null)
-        {
-            return false;
-        }
-
-        if(comparand.GetType() != typeof(ExtendedIPAddress))
-        {
-            return false;
-        }
-
-        var other = (ExtendedIPAddress)comparand;
-
-        return CompareTo(other) == 0;
-    }
-
-    new public BigInteger GetHashCode()
-    {
-        throw new NotImplementedException();
-    }
-
     public static new ExtendedIPAddress Parse(string input)
     {
         IPAddress address = IPAddress.Parse(input);
@@ -277,10 +242,9 @@ public class ExtendedIPAddress : IPAddress, IEquatable<ExtendedIPAddress>, IComp
 
     public static bool TryParse(string ipString, [NotNullWhen(true)] out ExtendedIPAddress? address)
     {
-        IPAddress? tempAddress;
-        bool result = IPAddress.TryParse(ipString, out tempAddress);
+        bool result = IPAddress.TryParse(ipString, out IPAddress? tempAddress);
 
-        if(tempAddress != null)
+        if (tempAddress != null)
         {
             address = new(tempAddress);
         }
@@ -295,4 +259,8 @@ public class ExtendedIPAddress : IPAddress, IEquatable<ExtendedIPAddress>, IComp
     {
         return new ExtendedIPAddress(GetAddressBytes(), ScopeId);
     }
+
+    public override bool Equals(object? comparand) => base.Equals(comparand);
+
+    public override int GetHashCode() => base.GetHashCode();
 }
