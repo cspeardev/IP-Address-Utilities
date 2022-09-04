@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Numerics;
 
 namespace IPAddressUtilities;
@@ -270,7 +271,24 @@ public class ExtendedIPAddress : IPAddress, IEquatable<ExtendedIPAddress>, IComp
     public static new ExtendedIPAddress Parse(string input)
     {
         IPAddress address = IPAddress.Parse(input);
+
         return new(address);
+    }
+
+    public static bool TryParse(string ipString, [NotNullWhen(true)] out ExtendedIPAddress? address)
+    {
+        IPAddress? tempAddress;
+        bool result = IPAddress.TryParse(ipString, out tempAddress);
+
+        if(tempAddress != null)
+        {
+            address = new(tempAddress);
+        }
+        else
+        {
+            address = null;
+        }
+        return result;
     }
 
     public object Clone()
