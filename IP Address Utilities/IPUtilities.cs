@@ -1,40 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Numerics;
 
 namespace IPAddressUtilities
 {
     public static class IPUtilities
     {
-
-        /// <summary>
-        /// Increments provided IP address to the next address
-        /// </summary>
-        /// <param name="address">IP Address to be incremented</param>
-        /// <returns></returns>
-        public static ExtendedIPAddress IncrementIPAddress(IPAddress address, BigInteger incrementAmount)
-        {
-            int tetCount = address.GetAddressBytes().Count();
-            ExtendedIPAddress incrementedAddress;
-
-            BigInteger addressInt = ConvertIPAddressBits(address);
-            addressInt += incrementAmount;
-            incrementedAddress = ConvertBitsToAddress(addressInt,tetCount);
-            return incrementedAddress;
-        }
-
-        private static ExtendedIPAddress ConvertBitsToAddress(BigInteger bits, int tetCount)
-        {
-            byte[] addressBytes = new byte[tetCount];
-            for (int i = 0; i < tetCount; i++)
-            {
-                addressBytes[i] = (byte)((bits
-                    >> (8 * (tetCount - (i + 1)))) & 0xFF);
-            }
-            return new ExtendedIPAddress(addressBytes);
-        }
-
         private static BigInteger ConvertIPAddressBits(IPAddress address)
         {
             int tetCount = address.GetAddressBytes().Count();
@@ -72,7 +42,7 @@ namespace IPAddressUtilities
         /// <param name="firstAddress">First IP address to be compared</param>
         /// <param name="secondAddress">Second IP address to be compared</param>
         /// <returns></returns>
-        public static BigInteger CompareIPAddresses(ExtendedIPAddress firstAddress, ExtendedIPAddress secondAddress)
+        private static BigInteger CompareIPAddresses(ExtendedIPAddress firstAddress, ExtendedIPAddress secondAddress)
         {
             BigInteger difference;
 
@@ -93,7 +63,7 @@ namespace IPAddressUtilities
             for (int i = 0; i < addressCount; i++)
             {
                 targetAddresses.Add(currentAddress);
-                currentAddress = IPUtilities.IncrementIPAddress(currentAddress,1);
+                currentAddress++;
             }
             return targetAddresses;
         }
