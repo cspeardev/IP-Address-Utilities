@@ -50,20 +50,14 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
     /// <param name="a"></param>
     /// <param name="b"></param>
     /// <returns></returns>
-    public static bool operator >(ExtendedIPAddress a, ExtendedIPAddress b)
-    {
-        return a.CompareTo(b) > 0;
-    }
+    public static bool operator >(ExtendedIPAddress a, ExtendedIPAddress b) => a.CompareTo(b) > 0;
     /// <summary>
     /// Greater than or equal to operator.
     /// </summary>
     /// <param name="a"></param>
     /// <param name="b"></param>
     /// <returns></returns>
-    public static bool operator >=(ExtendedIPAddress a, ExtendedIPAddress b)
-    {
-        return (a.CompareTo(b) > 0 || a.CompareTo(b) == 0);
-    }
+    public static bool operator >=(ExtendedIPAddress a, ExtendedIPAddress b) => a.CompareTo(b) > 0 || a.CompareTo(b) == 0;
 
     /// <summary>
     /// Less than operator.
@@ -71,20 +65,14 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
     /// <param name="a"></param>
     /// <param name="b"></param>
     /// <returns></returns>
-    public static bool operator <(ExtendedIPAddress a, ExtendedIPAddress b)
-    {
-        return (a.CompareTo(b) < 0);
-    }
+    public static bool operator <(ExtendedIPAddress a, ExtendedIPAddress b) => a.CompareTo(b) < 0;
     /// <summary>
     /// Less than or equal to operator.
     /// </summary>
     /// <param name="a"></param>
     /// <param name="b"></param>
     /// <returns></returns>
-    public static bool operator <=(ExtendedIPAddress a, ExtendedIPAddress b)
-    {
-        return (a.CompareTo(b) < 0 || a.CompareTo(b) == 0);
-    }
+    public static bool operator <=(ExtendedIPAddress a, ExtendedIPAddress b) => a.CompareTo(b) < 0 || a.CompareTo(b) == 0;
     /// <summary>
     /// Increment operator.
     /// </summary>
@@ -153,10 +141,7 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
     /// <param name="left"></param>
     /// <param name="right"></param>
     /// <returns></returns>
-    public static bool operator !=(ExtendedIPAddress left, ExtendedIPAddress right)
-    {
-        return !(left == right);
-    }
+    public static bool operator !=(ExtendedIPAddress left, ExtendedIPAddress right) => !(left == right);
     #endregion
 
     /// <summary>
@@ -255,10 +240,7 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
         return result;
     }
 
-    public object Clone()
-    {
-        return new ExtendedIPAddress(GetAddressBytes(), ScopeId);
-    }
+    public object Clone() => new ExtendedIPAddress(GetAddressBytes(), ScopeId);
 
     public override bool Equals(object? comparand) => base.Equals(comparand);
 
