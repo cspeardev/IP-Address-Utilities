@@ -10,10 +10,6 @@ namespace IPAddressUtilities;
 public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, ICloneable
 {
     #region constructors
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="address"></param>
     public ExtendedIPAddress(byte[] address) : base(address)
     {
     }
@@ -87,6 +83,10 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
         BigInteger addressInt = ConvertIPAddressBits(a);
         addressInt++;
         incrementedAddress = ConvertBitsToAddress(addressInt, tetCount);
+        if (a.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+        {
+            incrementedAddress.ScopeId = a.ScopeId;
+        }
         return incrementedAddress;
     }
     /// <summary>
@@ -203,8 +203,24 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
     public int CompareTo(ExtendedIPAddress? other)
     {
         ArgumentNullException.ThrowIfNull(other);
+        //TODO: Add logic for scopeid
+        long scopeDifference = 0;
+        if(this.IsIpV6() && other.IsIpV6())
+        {
+            scopeDifference = this.ScopeId - other.ScopeId;
+        }
+
+        if(scopeDifference > 0)
+        {
+            return 1;
+        }
+        else if(scopeDifference < 0)
+        {
+            return -1;
+        }
+
         var comparison = CompareIPAddresses(this, other);
-        if(comparison > 0)
+        if (comparison > 0)
         {
             return 1;
         }
@@ -242,7 +258,41 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
 
     public object Clone() => new ExtendedIPAddress(GetAddressBytes(), ScopeId);
 
-    public override bool Equals(object? comparand) => base.Equals(comparand);
+    public override bool Equals(object? comparand)
+    {
+        if (ReferenceEquals(this, comparand))
+        {
+            return true;
+        }
+
+        if (!base.Equals(comparand))
+        {
+            return false;
+        }
+        var comparandAddress = comparand as ExtendedIPAddress;
+
+        if (comparandAddress is null)
+        {
+            return false;
+        }
+
+        if (!Enumerable.SequenceEqual(GetAddressBytes(), comparandAddress.GetAddressBytes()))
+        {
+            return false;
+        }
+
+        if(comparandAddress.IsIpV6() && this.IsIpV6() && ScopeId != comparandAddress.ScopeId)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool IsIpV6()
+    {
+        return AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6;
+    }
 
     public override int GetHashCode() => base.GetHashCode();
 }
