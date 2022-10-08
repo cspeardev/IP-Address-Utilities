@@ -1,5 +1,6 @@
 ﻿using IP_Address_Utilities_Tests;
 using IPAddressUtilities;
+using System.Net;
 using Xunit;
 using static Xunit.Assert;
 
@@ -12,7 +13,6 @@ namespace IPAddressUtilitiesTests
         [MemberData(nameof(ExtendedIpAddressTestData.NotEqualTestData), MemberType = typeof(ExtendedIpAddressTestData))]
         public void NotEqualTest(ExtendedIPAddress first, ExtendedIPAddress second)
         {
-            NotEqual(first, second);
             True(first != second);
         }
 
@@ -20,8 +20,8 @@ namespace IPAddressUtilitiesTests
         [MemberData(nameof(ExtendedIpAddressTestData.EqualsTestData), MemberType = typeof(ExtendedIpAddressTestData))]
         public void EqualTest(ExtendedIPAddress first, ExtendedIPAddress second)
         {
-            Equal(first, second);
             True(first == second);
+            Equal(first.GetHashCode(), second.GetHashCode());
         }
 
         [Theory]
@@ -76,6 +76,7 @@ namespace IPAddressUtilitiesTests
         {
             ExtendedIPAddress address = ExtendedIPAddress.Parse(toParse);
             NotNull(address);
+            Equal(expected, address);
         }
     }
 }
