@@ -1,6 +1,4 @@
-﻿using IPAddressUtilities;
-
-namespace IP_Address_Utilities_Tests;
+﻿namespace IPAddressUtilities.Tests;
 
 internal class ExtendedIpAddressTestData
 {
@@ -8,7 +6,7 @@ internal class ExtendedIpAddressTestData
     {
         get
         {
-            yield return new object[] { new ExtendedIPAddress(new byte[] {10, 0, 0 ,1}), new ExtendedIPAddress(new byte[] { 10, 0, 0, 2 }) };
+            yield return new object[] { new ExtendedIPAddress(new byte[] { 10, 0, 0, 1 }), new ExtendedIPAddress(new byte[] { 10, 0, 0, 2 }) };
             yield return new object[] { new ExtendedIPAddress(new byte[] { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 }, 5), new ExtendedIPAddress(new byte[] { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 }, 3), };
         }
     }
@@ -23,7 +21,7 @@ internal class ExtendedIpAddressTestData
             yield return new object[] { new ExtendedIPAddress(new byte[] { 10, 255, 255, 255 }), new ExtendedIPAddress(new byte[] { 11, 0, 0, 0 }) };
             yield return new object[] { new ExtendedIPAddress(new byte[] { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }), new ExtendedIPAddress(new byte[] { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 }) };
             yield return new object[] { new ExtendedIPAddress(new byte[] { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, 5), new ExtendedIPAddress(new byte[] { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 }, 5), };
-        }   
+        }
     }
 
     public static IEnumerable<object[]> DecrementTestData
@@ -52,7 +50,7 @@ internal class ExtendedIpAddressTestData
     {
         get
         {
-            yield return new object[] { new ExtendedIPAddress(new byte[] { 10, 0, 0, 2 } ), new ExtendedIPAddress(new byte[] { 10, 0, 0, 1 } ) };
+            yield return new object[] { new ExtendedIPAddress(new byte[] { 10, 0, 0, 2 }), new ExtendedIPAddress(new byte[] { 10, 0, 0, 1 }) };
             yield return new object[] { new ExtendedIPAddress(new byte[] { 10, 0, 1, 2 }), new ExtendedIPAddress(new byte[] { 10, 0, 1, 1 }) };
             yield return new object[] { new ExtendedIPAddress(new byte[] { 10, 1, 0, 2 }), new ExtendedIPAddress(new byte[] { 10, 1, 0, 1 }) };
             yield return new object[] { new ExtendedIPAddress(new byte[] { 11, 0, 0, 2 }), new ExtendedIPAddress(new byte[] { 10, 0, 0, 1 }) };
@@ -76,7 +74,7 @@ internal class ExtendedIpAddressTestData
             yield return new object[] { "255.255.255.255", new ExtendedIPAddress(new byte[] { 255, 255, 255, 255 }) };
             yield return new object[] { "10.0.0.2", new ExtendedIPAddress(new byte[] { 10, 0, 0, 2 }) };
             yield return new object[] { "a00::1", new ExtendedIPAddress(new byte[] { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }) };
-            yield return new object[] { "a00::1%3", new ExtendedIPAddress(new byte[] { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },3) };
+            yield return new object[] { "a00::1%3", new ExtendedIPAddress(new byte[] { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, 3) };
         }
     }
 }

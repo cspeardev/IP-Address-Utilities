@@ -32,7 +32,7 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
 
     public ExtendedIPAddress(IPAddress inAddress) : base(inAddress.GetAddressBytes())
     {
-        if(inAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+        if (inAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
         {
             ScopeId = inAddress.ScopeId;
         }
@@ -116,8 +116,8 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
         byte[] addressBytes = new byte[tetCount];
         for (int i = 0; i < tetCount; i++)
         {
-            addressBytes[i] = (byte)((bits
-                >> (8 * (tetCount - (i + 1)))) & 0xFF);
+            addressBytes[i] = (byte)(bits
+                >> 8 * (tetCount - (i + 1)) & 0xFF);
         }
         return new ExtendedIPAddress(addressBytes);
     }
@@ -159,10 +159,10 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
 
         BigInteger addressBits = 0;
 
-        for (int i = 0; i < (tetCount / groupBytesSize); i++)
+        for (int i = 0; i < tetCount / groupBytesSize; i++)
         {
             BigInteger groupBits = GetGroupBits(addressBytes, groupBytesSize, i);
-            addressBits |= groupBits << (tetBits * ((tetCount / groupBytesSize) - (i + 1)));
+            addressBits |= groupBits << tetBits * (tetCount / groupBytesSize - (i + 1));
         }
         return addressBits;
     }
@@ -174,11 +174,11 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
 
         for (int i = 0; i < groupByteSize; i++)
         {
-            groupBytes |= addressBytes[((startIndex) + groupByteSize) - (i + 1)] << (8 * (i));
+            groupBytes |= addressBytes[startIndex + groupByteSize - (i + 1)] << 8 * i;
         }
         return groupBytes;
     }
-    
+
     /// <summary>
     /// Compares two IP addresses.
     /// </summary>
@@ -205,16 +205,16 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
         ArgumentNullException.ThrowIfNull(other);
         //TODO: Add logic for scopeid
         long scopeDifference = 0;
-        if(this.IsIpV6() && other.IsIpV6())
+        if (IsIpV6() && other.IsIpV6())
         {
-            scopeDifference = this.ScopeId - other.ScopeId;
+            scopeDifference = ScopeId - other.ScopeId;
         }
 
-        if(scopeDifference > 0)
+        if (scopeDifference > 0)
         {
             return 1;
         }
-        else if(scopeDifference < 0)
+        else if (scopeDifference < 0)
         {
             return -1;
         }
@@ -224,7 +224,7 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
         {
             return 1;
         }
-        else if(comparison < 0)
+        else if (comparison < 0)
         {
             return -1;
         }
@@ -243,7 +243,7 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
 
     public static bool TryParse(string ipString, [NotNullWhen(true)] out ExtendedIPAddress? address)
     {
-        bool result = IPAddress.TryParse(ipString, out IPAddress? tempAddress);
+        bool result = TryParse(ipString, out IPAddress? tempAddress);
 
         if (tempAddress != null)
         {
@@ -275,12 +275,12 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
             return false;
         }
 
-        if (!Enumerable.SequenceEqual(GetAddressBytes(), comparandAddress.GetAddressBytes()))
+        if (!GetAddressBytes().SequenceEqual(comparandAddress.GetAddressBytes()))
         {
             return false;
         }
 
-        if(comparandAddress.IsIpV6() && this.IsIpV6() && ScopeId != comparandAddress.ScopeId)
+        if (comparandAddress.IsIpV6() && IsIpV6() && ScopeId != comparandAddress.ScopeId)
         {
             return false;
         }
