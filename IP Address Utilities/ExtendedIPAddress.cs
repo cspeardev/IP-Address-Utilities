@@ -269,9 +269,8 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
         {
             return false;
         }
-        var comparandAddress = comparand as ExtendedIPAddress;
 
-        if (comparandAddress is null)
+        if (comparand is not ExtendedIPAddress comparandAddress)
         {
             return false;
         }
