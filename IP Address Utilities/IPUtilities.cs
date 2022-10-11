@@ -56,7 +56,7 @@ namespace IPAddressUtilities
 
         public static List<IPAddress> CalculateIPRange(ExtendedIPAddress start, ExtendedIPAddress end)
         {
-            List<IPAddress> targetAddresses = new List<IPAddress>();
+            List<IPAddress> targetAddresses = new();
             BigInteger addressCount;
             addressCount = IPUtilities.CompareIPAddresses(start, end) + 1;
             ExtendedIPAddress currentAddress = start;
