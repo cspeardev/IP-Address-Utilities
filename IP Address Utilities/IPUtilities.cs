@@ -7,7 +7,7 @@ namespace IPAddressUtilities
     {
         private static BigInteger ConvertIPAddressBits(IPAddress address)
         {
-            int tetCount = address.GetAddressBytes().Count();
+            int tetCount = address.GetAddressBytes().Length;
             int tetBits = address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork ? 8 : 16;
             int groupBytesSize = tetBits / 8;
 
