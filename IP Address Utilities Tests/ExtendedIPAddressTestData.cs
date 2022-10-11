@@ -53,6 +53,10 @@ internal class ExtendedIpAddressTestData
         get
         {
             yield return new object[] { new ExtendedIPAddress(new byte[] { 10, 0, 0, 2 } ), new ExtendedIPAddress(new byte[] { 10, 0, 0, 1 } ) };
+            yield return new object[] { new ExtendedIPAddress(new byte[] { 10, 0, 1, 2 }), new ExtendedIPAddress(new byte[] { 10, 0, 1, 1 }) };
+            yield return new object[] { new ExtendedIPAddress(new byte[] { 10, 1, 0, 2 }), new ExtendedIPAddress(new byte[] { 10, 1, 0, 1 }) };
+            yield return new object[] { new ExtendedIPAddress(new byte[] { 11, 0, 0, 2 }), new ExtendedIPAddress(new byte[] { 10, 0, 0, 1 }) };
+            yield return new object[] { new ExtendedIPAddress(new byte[] { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }), new ExtendedIPAddress(new byte[] { 10, 0, 0, 1 }) };
         }
     }
 
@@ -60,7 +64,7 @@ internal class ExtendedIpAddressTestData
     {
         get
         {
-            yield return new object[] { new ExtendedIPAddress(new byte[] { 10, 0, 0, 2 }), new ExtendedIPAddress(new byte[] { 10, 0, 0, 1 }) };
+            yield return new object[] { new ExtendedIPAddress(new byte[] { 10, 0, 0, 1 }), new ExtendedIPAddress(new byte[] { 10, 0, 0, 2 }) };
         }
     }
 

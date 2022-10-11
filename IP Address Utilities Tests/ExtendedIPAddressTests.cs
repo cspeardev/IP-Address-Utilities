@@ -49,7 +49,7 @@ namespace IPAddressUtilitiesTests
 
         [Theory]
         [MemberData(nameof(ExtendedIpAddressTestData.LessThanTestData), MemberType = typeof(ExtendedIpAddressTestData))]
-        public void LessThanTest(ExtendedIPAddress upper, ExtendedIPAddress lower)
+        public void LessThanTest(ExtendedIPAddress lower, ExtendedIPAddress upper)
         {
             True(lower < upper);
         }
@@ -65,7 +65,7 @@ namespace IPAddressUtilitiesTests
         [Theory]
         [MemberData(nameof(ExtendedIpAddressTestData.LessThanTestData), MemberType = typeof(ExtendedIpAddressTestData))]
         [MemberData(nameof(ExtendedIpAddressTestData.EqualsTestData), MemberType = typeof(ExtendedIpAddressTestData))]
-        public void LessThanOrEqualTest(ExtendedIPAddress upper, ExtendedIPAddress lower)
+        public void LessThanOrEqualTest(ExtendedIPAddress lower, ExtendedIPAddress upper)
         {
             True(lower <= upper);
         }
