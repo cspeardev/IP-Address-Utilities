@@ -203,7 +203,6 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
     public int CompareTo(ExtendedIPAddress? other)
     {
         ArgumentNullException.ThrowIfNull(other);
-        //TODO: Add logic for scopeid
         long scopeDifference = 0;
         if (IsIpV6() && other.IsIpV6())
         {
@@ -294,4 +293,18 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
     }
 
     public override int GetHashCode() => base.GetHashCode();
+
+    public static List<IPAddress> CalculateIPRange(ExtendedIPAddress start, ExtendedIPAddress end)
+    {
+        List<IPAddress> targetAddresses = new();
+        BigInteger addressCount;
+        addressCount = CompareIPAddresses(start, end) + 1;
+        ExtendedIPAddress currentAddress = start;
+        for (int i = 0; i < addressCount; i++)
+        {
+            targetAddresses.Add(currentAddress);
+            currentAddress++;
+        }
+        return targetAddresses;
+    }
 }
