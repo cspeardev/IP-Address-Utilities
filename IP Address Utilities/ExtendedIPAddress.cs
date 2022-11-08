@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Numerics;
 
 namespace IPAddressUtilities;
 
@@ -80,7 +79,7 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
         int tetCount = a.GetAddressBytes().Length;
         ExtendedIPAddress incrementedAddress;
 
-        BigInteger addressInt = ConvertIPAddressBits(a);
+        UInt128 addressInt = ConvertIPAddressBits(a);
         addressInt++;
         incrementedAddress = ConvertBitsToAddress(addressInt, tetCount);
         if (a.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
@@ -100,7 +99,7 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
         int tetCount = a.GetAddressBytes().Length;
         ExtendedIPAddress decrementedAddress;
 
-        BigInteger addressInt = ConvertIPAddressBits(a);
+        UInt128 addressInt = ConvertIPAddressBits(a);
         addressInt--;
         decrementedAddress = ConvertBitsToAddress(addressInt, tetCount);
         return decrementedAddress;
@@ -111,7 +110,7 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
     /// <param name="bits"></param>
     /// <param name="tetCount"></param>
     /// <returns></returns>
-    private static ExtendedIPAddress ConvertBitsToAddress(BigInteger bits, int tetCount)
+    private static ExtendedIPAddress ConvertBitsToAddress(UInt128 bits, int tetCount)
     {
         byte[] addressBytes = new byte[tetCount];
         for (int i = 0; i < tetCount; i++)
@@ -145,11 +144,11 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
     #endregion
 
     /// <summary>
-    /// Sums the bits of <paramref name="address"/> into a BigInt.
+    /// Sums the bits of <paramref name="address"/> into a UInt128.
     /// </summary>
     /// <param name="address"></param>
     /// <returns></returns>
-    private static BigInteger ConvertIPAddressBits(ExtendedIPAddress address)
+    private static UInt128 ConvertIPAddressBits(ExtendedIPAddress address)
     {
         int tetCount = address.GetAddressBytes().Length;
         int tetBits = address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork ? 8 : 16;
@@ -157,24 +156,24 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
 
         byte[] addressBytes = address.GetAddressBytes();
 
-        BigInteger addressBits = 0;
+        UInt128 addressBits = 0;
 
         for (int i = 0; i < tetCount / groupBytesSize; i++)
         {
-            BigInteger groupBits = GetGroupBits(addressBytes, groupBytesSize, i);
-            addressBits |= groupBits << tetBits * (tetCount / groupBytesSize - (i + 1));
+            UInt128 groupBits = GetGroupBits(addressBytes, groupBytesSize, i);
+            addressBits |= (groupBits << tetBits * (tetCount / groupBytesSize - (i + 1)));
         }
         return addressBits;
     }
-    private static BigInteger GetGroupBits(byte[] addressBytes, int groupByteSize, int startIndex)
+    private static UInt128 GetGroupBits(byte[] addressBytes, int groupByteSize, int startIndex)
     {
-        BigInteger groupBytes = 0;
+        UInt128 groupBytes = 0;
 
         startIndex *= groupByteSize;
 
         for (int i = 0; i < groupByteSize; i++)
         {
-            groupBytes |= addressBytes[startIndex + groupByteSize - (i + 1)] << 8 * i;
+            groupBytes |= (UInt128)(addressBytes[startIndex + groupByteSize - (i + 1)] << (8 * i));
         }
         return groupBytes;
     }
@@ -186,17 +185,20 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
     /// <param name="secondAddress"></param>
     /// <exception cref="ArgumentNullException"/>
     /// <returns>The number of addresses between <paramref name="firstAddress"/> and <paramref name="secondAddress"/></returns>
-    private static BigInteger CompareIPAddresses(ExtendedIPAddress firstAddress, ExtendedIPAddress secondAddress)
+    private static UInt128 CompareIPAddresses(ExtendedIPAddress firstAddress, ExtendedIPAddress secondAddress)
     {
         ArgumentNullException.ThrowIfNull(firstAddress, nameof(firstAddress));
         ArgumentNullException.ThrowIfNull(secondAddress, nameof(secondAddress));
 
-        BigInteger difference;
+        UInt128 difference;
 
-        BigInteger firstAddressBits = ConvertIPAddressBits(firstAddress);
-        BigInteger secondAddressBits = ConvertIPAddressBits(secondAddress);
+        UInt128 firstAddressBits = ConvertIPAddressBits(firstAddress);
+        UInt128 secondAddressBits = ConvertIPAddressBits(secondAddress);
 
-        difference = firstAddressBits - secondAddressBits;
+        UInt128 upper = UInt128.Max(firstAddressBits, secondAddressBits);
+        UInt128 lower = UInt128.Min(firstAddressBits, secondAddressBits);
+
+        difference = upper - lower;
 
         return difference;
     }
@@ -218,12 +220,14 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
             return -1;
         }
 
-        var comparison = CompareIPAddresses(this, other);
-        if (comparison > 0)
+        UInt128 thisBits = ConvertIPAddressBits(this);
+        UInt128 otherBits = ConvertIPAddressBits(other);
+        
+        if (thisBits > otherBits)
         {
             return 1;
         }
-        else if (comparison < 0)
+        else if (thisBits < otherBits)
         {
             return -1;
         }
@@ -297,10 +301,10 @@ public class ExtendedIPAddress : IPAddress, IComparable<ExtendedIPAddress>, IClo
     public static List<IPAddress> CalculateIPRange(ExtendedIPAddress start, ExtendedIPAddress end)
     {
         List<IPAddress> targetAddresses = new();
-        BigInteger addressCount;
+        UInt128 addressCount;
         addressCount = CompareIPAddresses(start, end) + 1;
         ExtendedIPAddress currentAddress = start;
-        for (int i = 0; i < addressCount; i++)
+        for (UInt128 i = 0; i < addressCount; i++)
         {
             targetAddresses.Add(currentAddress);
             currentAddress++;
