@@ -1,5 +1,4 @@
-﻿using Xunit;
-using static Xunit.Assert;
+﻿using static Xunit.Assert;
 
 namespace IPAddressUtilities.Tests;
 
